@@ -9,18 +9,20 @@ import java.io.IOException;
 /**
  * @author crsmoro
  * @author LeanderK
+ * @author Tokazio
  * @version 1.0
  */
-public class AudioPlayer implements AudioListener {
-    private static final transient Log log = LogFactory.getLog(AudioPlayer.class);
+public class JavaAudioPlayer implements AudioListener {
+    private static final transient Log log = LogFactory.getLog(JavaAudioPlayer.class);
     private final SpotifyConnectPlayer player;
     private SourceDataLine audioLine;
     private boolean isMuted = false;
 
-    public AudioPlayer(final SpotifyConnectPlayer player) throws LineUnavailableException, IOException {
+    public JavaAudioPlayer(final SpotifyConnectPlayer player) throws LineUnavailableException, IOException {
         this.player = player;
     }
 
+    @Override
     public void mute() {
         if (audioLine == null) {
             isMuted = true;
@@ -34,6 +36,7 @@ public class AudioPlayer implements AudioListener {
         }
     }
 
+    @Override
     public void unMute() {
         if (audioLine == null) {
             isMuted = false;
@@ -111,7 +114,7 @@ public class AudioPlayer implements AudioListener {
     }
 
     @Override
-    public void onVolumeChanged(short volume) {
+    public void onVolumeChanged(int volume) {
         log.info("apply_volume_callback");
         log.debug("volume: " + volume);
         if (audioLine == null)
@@ -120,33 +123,23 @@ public class AudioPlayer implements AudioListener {
             return;
         }
         FloatControl volumeControl = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
-        float maxDb = volumeControl.getMaximum();
+        
+	float maxDb = volumeControl.getMaximum();
         log.debug("maxDb : " + maxDb);
-        float minDbOrig = volumeControl.getMinimum();
-        float minDb = minDbOrig + ((maxDb - minDbOrig)/3);
+        float minDb = volumeControl.getMinimum();
         log.debug("minDb : " + minDb);
-        float newVolume = 0;
-
-        float volumePercent = (float) (volume / 655.35);
-        if (volumePercent < 0) {
-            volumePercent = 100 + volumePercent;
-        }
+        float volumePercent = (volume / Integer.MAX_VALUE) *100f;
         log.debug("volume percent : " + volumePercent);
-        newVolume = (volumePercent * minDb / 100);
-        newVolume = (newVolume - minDb) * -1;
 
-        if (volume == 0) {
-            log.debug("volume 0, setting max");
-            newVolume = minDbOrig;
-        }
-
+	float newVolume = 0;
+        newVolume = (volumePercent * maxDb) + minDb;
         log.debug("newVolume : " + newVolume);
-        volumeControl.setValue(newVolume);
+
+	volumeControl.setValue(newVolume);
     }
 
     @Override
     public void close() {
         onInactive();
     }
-    
 }

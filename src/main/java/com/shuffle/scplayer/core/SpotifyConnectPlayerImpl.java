@@ -31,6 +31,7 @@ import com.shuffle.scplayer.jna.SpotifyLibrary.SpDeviceType;
 import com.shuffle.scplayer.jna.SpotifyLibrary.SpError;
 import com.shuffle.scplayer.jna.SpotifyLibrary.SpImageSize;
 import com.shuffle.scplayer.jna.SpotifyLibrary.SpPlaybackNotify;
+import com.shuffle.scplayer.jna.Uint16;
 import com.shuffle.scplayer.utils.NativeUtils;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
@@ -41,6 +42,7 @@ import com.sun.jna.ptr.IntByReference;
 /**
  * @author crsmoro
  * @author LeanderK
+ * @author Tokazio
  */
 public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 
@@ -101,7 +103,7 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 
 			spConfig = initSPConfig(appKeyByte);
 
-			audioListener = new AudioPlayer(this);
+			audioListener = new JavaAudioPlayer(this);
 
 			registerConnectionCallbacks();
 			registerPlaybackCallbacks();
@@ -360,10 +362,10 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 	}
 
 	@Override
-	public short getVolume() {
+	public int getVolume() {
 		try {
 			libLock.lock();
-			return spotifyLib.SpPlaybackGetVolume();
+			return spotifyLib.SpPlaybackGetVolume().intValue();
 		} finally {
 			libLock.unlock();
 		}
@@ -490,10 +492,10 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 	}
 
 	@Override
-	public void volume(short volume) {
+	public void volume(int volume) {
 		try {
 			libLock.lock();
-			spotifyLib.SpPlaybackUpdateVolume(volume);
+			spotifyLib.SpPlaybackUpdateVolume(new Uint16(volume));
 		} finally {
 			libLock.unlock();
 		}

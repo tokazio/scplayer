@@ -5,6 +5,7 @@ import javax.sound.sampled.Mixer;
 /**
  * @author crsmoro
  * @author LeanderK
+ * @author Tokazio
  * @version 1.0
  */
 public interface SpotifyConnectPlayer {
@@ -14,7 +15,7 @@ public interface SpotifyConnectPlayer {
 
     boolean getRepeat();
 
-    short getVolume();
+    int getVolume();
 
     int getSeek();
 
@@ -40,7 +41,7 @@ public interface SpotifyConnectPlayer {
 
     void repeat(boolean enabled);
 
-    void volume(short volume);
+    void volume(int volume);
 
     void login(String username, String password);
     

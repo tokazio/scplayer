@@ -7,6 +7,7 @@ import javax.sound.sampled.SourceDataLine;
 /**
  * @author crsmoro
  * @author LeanderK
+ * @author Tokazio
  * @version 1.0
  */
 public interface AudioListener {
@@ -32,7 +33,11 @@ public interface AudioListener {
 
     int onAudioData(byte[] data);
 
-    void onVolumeChanged(short volume);
+    void onVolumeChanged(int volume);
 
     void close();
+    
+    void mute();
+    
+    void unMute();
 }

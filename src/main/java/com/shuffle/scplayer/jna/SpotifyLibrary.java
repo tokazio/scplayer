@@ -246,7 +246,7 @@ public interface SpotifyLibrary extends Library {
 	 * Original signature : <code>SpError SpPlaybackUpdateVolume(uint16_t)</code><br>
 	 * <i>native declaration : line 163</i>
 	 */
-	int SpPlaybackUpdateVolume(short volume);
+	int SpPlaybackUpdateVolume(Uint16 volume);
 	/**
 	 * Original signature : <code>SpError SpPlaybackEnableShuffle(_Bool)</code><br>
 	 * <i>native declaration : line 164</i>
@@ -266,7 +266,7 @@ public interface SpotifyLibrary extends Library {
 	 * Original signature : <code>uint16_t SpPlaybackGetVolume()</code><br>
 	 * <i>native declaration : line 168</i>
 	 */
-	short SpPlaybackGetVolume();
+	Uint16 SpPlaybackGetVolume();
 	/**
 	 * Original signature : <code>_Bool SpPlaybackIsPlaying()</code><br>
 	 * <i>native declaration : line 169</i>
